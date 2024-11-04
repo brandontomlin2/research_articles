@@ -3,6 +3,8 @@
 
 Below you will find a list of all the research / articles that I have read and found interesting.
 
+If you would like to contribute to this list, please open a PR.
+
 
 ## Articles
 

@@ -14,7 +14,6 @@ def main():
     readme.add_header('Articles', level=2)
     readme.create_table(['Title', 'Summary'])
 
-    # Define your articles
     articles = [
         {
             'title': 'SCIENCEAGENTBENCH: TOWARD RIGOROUS ASSESSMENT OF LANGUAGE AGENTS FOR DATA-DRIVEN SCIENTIFIC DISCOVERY',
@@ -33,7 +32,6 @@ def main():
         }
     ]
 
-    # Add articles to the table
     for article in articles:
         link = readme.create_link(article['title'], article['url'])
         readme.add_table_row([link, article['summary']])
