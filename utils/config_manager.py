@@ -4,18 +4,19 @@ from pathlib import Path
 from configparser import ConfigParser, ExtendedInterpolation
 from typing import Optional, Any
 
+
 class ConfigManager:
     """Manages configuration for the README manager using ConfigParser."""
-    
+
     DEFAULT_CONFIG_PATHS = [
-        'config/default_config.ini',  # Project-level default config
-        '~/.readme_manager/config.ini',  # User-level config
-        '.readme_manager.ini'  # Directory-level config
+        "config.ini",  # Project-level default config
+        "~/.readme_manager/config.ini",  # User-level config
+        ".readme_manager.ini",  # Directory-level config
     ]
 
     def __init__(self, custom_config_path: Optional[str] = None):
         """Initialize the configuration manager.
-        
+
         Args:
             custom_config_path: Optional path to a custom config file
         """
@@ -46,26 +47,27 @@ class ConfigManager:
 
     def _load_default_config(self) -> None:
         """Load default configuration values."""
-        self.config.add_section('file_settings')
-        self.config.set('file_settings', 'default_file', 'README.md')
-        self.config.set('file_settings', 'backup_enabled', 'yes')
-        self.config.set('file_settings', 'backup_directory', '.backups')
-        self.config.set('file_settings', 'backup_count', '5')
+        self.config.add_section("file_settings")
+        self.config.set("file_settings", "default_file", "README.md")
+        self.config.set("file_settings", "backup_enabled", "yes")
+        self.config.set("file_settings", "backup_directory", ".backups")
+        self.config.set("file_settings", "backup_count", "5")
 
-        self.config.add_section('logging')
-        self.config.set('logging', 'level', 'INFO')
-        self.config.set('logging', 'format', 
-                       '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        self.config.set('logging', 'file', 'readme_manager.log')
+        self.config.add_section("logging")
+        self.config.set("logging", "level", "INFO")
+        self.config.set(
+            "logging", "format", "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
+        self.config.set("logging", "file", "readme_manager.log")
 
     def get(self, section: str, option: str, fallback: Any = None) -> Any:
         """Get a configuration value.
-        
+
         Args:
             section: Configuration section
             option: Option name within section
             fallback: Default value if option doesn't exist
-            
+
         Returns:
             Configuration value or fallback
         """
@@ -73,7 +75,7 @@ class ConfigManager:
 
     def getboolean(self, section: str, option: str, fallback: bool = None) -> bool:
         """Get a boolean configuration value.
-        
+
         Args:
             section: Configuration section
             option: Option name within section
@@ -91,7 +93,7 @@ class ConfigManager:
 
     def set(self, section: str, option: str, value: str) -> None:
         """Set a configuration value.
-        
+
         Args:
             section: Configuration section
             option: Option name within section
@@ -103,17 +105,17 @@ class ConfigManager:
 
     def save_config(self, path: Optional[str] = None) -> None:
         """Save current configuration to a file.
-        
+
         Args:
             path: Path to save the configuration file (optional)
         """
         if not path:
-            path = '.readme_manager.ini'
-        
+            path = ".readme_manager.ini"
+
         try:
             path = Path(path)
             path.parent.mkdir(parents=True, exist_ok=True)
-            with path.open('w') as f:
+            with path.open("w") as f:
                 self.config.write(f)
             self.logger.info(f"Saved configuration to {path}")
         except Exception as e:
