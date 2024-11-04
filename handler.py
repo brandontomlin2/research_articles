@@ -173,7 +173,7 @@ if __name__ == "__main__":
     # Create some links and add rows
     docs_link = readme.create_link('SCIENCEAGENTBENCH:TOWARD RIGOROUS ASSESSMENT OF LANGUAGE AGENTS FOR DATA-DRIVEN SCIENTIFIC DISCOVERY', 
                                    'docs/2410.05080v2.pdf')
-    readme.add_table_row(['SCIENCEAGENTBENCH:TOWARD RIGOROUS ASSESSMENT OF LANGUAGE AGENTS FOR DATA-DRIVEN SCIENTIFIC DISCOVERY',  docs_link])
+    readme.add_table_row([docs_link, 'Summary goes here'])
     
     
     # Add a row with multiple links in one cell
