@@ -1,24 +1,25 @@
 import os
 import logging
-from typing import List, Tuple, Optional
 from pathlib import Path
+from typing import List, Optional
+from .config_manager import ConfigManager
 
 class ReadmeManager:
     """A class to manage README.md files with support for headers, tables, and links."""
     
-    def __init__(self, filepath: str = 'README.md', preserve_existing: bool = False):
+    def __init__(self, filepath: Optional[str] = None, preserve_existing: bool = False):
         """Initialize the README manager.
         
         Args:
-            filepath: Path to the README.md file
-            preserve_existing: If True, keeps existing content. If False, starts fresh.
-            
-        Raises:
-            PermissionError: If file operations fail due to permissions
-            OSError: If file operations fail for other reasons
+            filepath: Path to the README.md file (optional, uses config if not provided)
+            preserve_existing: If True, keeps existing content. If False, starts fresh
         """
+        # Initialize configuration
+        self.config = ConfigManager()
         self.logger = self._setup_logging()
-        self.filepath = Path(filepath)
+        
+        # Initialize filepath from args or config
+        self.filepath = Path(filepath or self.config.get('file_settings', 'default_file'))
         self.content: List[str] = []
         
         try:
@@ -27,43 +28,56 @@ class ReadmeManager:
             self.logger.error(f"Failed to initialize README manager: {str(e)}")
             raise
     
-    @staticmethod
-    def _setup_logging() -> logging.Logger:
-        """Set up logging configuration.
-        
-        Returns:
-            logging.Logger: Configured logger instance
-        """
+    def _setup_logging(self) -> logging.Logger:
+        """Set up logging configuration."""
         logger = logging.getLogger('ReadmeManager')
-        if not logger.handlers:  # Avoid adding handlers multiple times
+        if not logger.handlers:
             handler = logging.StreamHandler()
             formatter = logging.Formatter(
-                '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+                self.config.get('logging', 'format',
+                              fallback='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             )
             handler.setFormatter(formatter)
             logger.addHandler(handler)
-            logger.setLevel(logging.INFO)
+            
+            level = self.config.get('logging', 'level', fallback='INFO')
+            logger.setLevel(getattr(logging, level))
         return logger
 
     def _initialize_file(self, preserve_existing: bool) -> None:
-        """Initialize the file, either preserving or deleting existing content.
-        
-        Args:
-            preserve_existing: If True, keeps existing content. If False, starts fresh.
-        """
+        """Initialize the file, either preserving or deleting existing content."""
         if not preserve_existing and self.filepath.exists():
+            if self.config.getboolean('file_settings', 'backup_enabled', fallback=True):
+                self._create_backup()
+            
             try:
                 self.filepath.unlink()
                 self.logger.info(f"Deleted existing file: {self.filepath}")
-            except PermissionError as e:
-                self.logger.error(f"Permission error deleting {self.filepath}: {str(e)}")
-                raise
             except Exception as e:
                 self.logger.error(f"Error deleting {self.filepath}: {str(e)}")
                 raise
 
         if preserve_existing:
             self._load_content()
+
+    def _create_backup(self) -> None:
+        """Create a backup of the existing file if backup is enabled."""
+        try:
+            backup_dir = Path(self.config.get('file_settings', 'backup_directory', fallback='.backups'))
+            backup_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Create timestamped backup
+            from datetime import datetime
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            backup_path = backup_dir / f"README_{timestamp}.md.bak"
+            
+            # Copy file to backup location
+            import shutil
+            shutil.copy2(self.filepath, backup_path)
+            self.logger.info(f"Created backup at {backup_path}")
+            
+        except Exception as e:
+            self.logger.warning(f"Failed to create backup: {str(e)}")
 
     def _load_content(self) -> None:
         """Load existing content from the file if it exists."""
@@ -86,7 +100,7 @@ class ReadmeManager:
 
     @staticmethod
     def create_link(text: str, url: str) -> str:
-        """Create a Markdown link with proper escaping.
+        """Create a Markdown link.
         
         Args:
             text: The text to display for the link
@@ -176,55 +190,58 @@ class ReadmeManager:
         row = '| ' + ' | '.join(values) + ' |'
         self.content.append(row)
 
-def main():
-    """Main function to demonstrate usage of ReadmeManager."""
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
+    def find_table_indices(self) -> List[tuple]:
+        """Find the start and end indices of all tables in the content.
+        
+        Returns:
+            List of tuples containing (start_index, end_index) for each table
+        """
+        tables = []
+        start_idx = None
+        
+        for i, line in enumerate(self.content):
+            if line.startswith('|') and i + 1 < len(self.content) and '---' in self.content[i + 1]:
+                start_idx = i
+            elif start_idx is not None and (not line.startswith('|') or i == len(self.content) - 1):
+                end_idx = i if not line.startswith('|') else i + 1
+                tables.append((start_idx, end_idx))
+                start_idx = None
+                
+        return tables
 
-    try:
-        readme = ReadmeManager(
-            filepath='README.md',
-            preserve_existing=False
-        )
-
-        readme.add_header('Research')
-        readme.add_text('Below you will find a list of research / articles that I have read and found interesting.')
-        readme.add_text('If you would like to contribute to this list, please open a PR.')
-
-        readme.add_header('Articles', level=2)
-        readme.create_table(['Title', 'Summary'])
-
-        # Define articles
-        articles = [
-            {
-                'title': 'SCIENCEAGENTBENCH: TOWARD RIGOROUS ASSESSMENT OF LANGUAGE AGENTS FOR DATA-DRIVEN SCIENTIFIC DISCOVERY',
-                'url': 'docs/2410.05080v2.pdf',
-                'summary': ''
-            },
-            {
-                'title': 'Combining Language Models and Knowledge Graphs for Effective Information Retrieval',
-                'url': 'docs/Combining_Language_Models_and_Knowledge_Graphs_for_Effective_Information_Retrieval.pdf',
-                'summary': ''
-            },
-            {
-                'title': 'Transforming Asset Servicing With AI, Oracles, and Blockchains',
-                'url': 'docs/transforming-asset-servicing-with-ai-oracles-and-blockchains.pdf',
-                'summary': ''
-            }
-        ]
-
-        # Add articles to table
-        for article in articles:
-            link = readme.create_link(article['title'], article['url'])
-            readme.add_table_row([link, article['summary']])
-
-        # Save the changes
-        readme.save()
-        logger.info("Successfully created README.md")
-
-    except Exception as e:
-        logger.error(f"Error creating README: {str(e)}")
-        raise
-
-if __name__ == "__main__":
-    main()
+    def add_column(self, header: str, values: Optional[List[str]] = None) -> None:
+        """Add a new column to the last table in the README.
+        
+        Args:
+            header: Header for the new column
+            values: Optional list of values for the new column
+        
+        Raises:
+            ValueError: If no tables exist in the README
+        """
+        tables = self.find_table_indices()
+        if not tables:
+            raise ValueError("No tables found in the README")
+        
+        start_idx, end_idx = tables[-1]
+        rows = self.content[start_idx:end_idx]
+        
+        # Update header row
+        header_parts = rows[0].split('|')
+        header_parts.insert(-1, f' {header.strip()} ')
+        self.content[start_idx] = '|'.join(header_parts)
+        
+        # Update separator row
+        separator_parts = rows[1].split('|')
+        separator_parts.insert(-1, ' --- ')
+        self.content[start_idx + 1] = '|'.join(separator_parts)
+        
+        # Update data rows
+        if values is None:
+            values = [''] * (len(rows) - 2)
+        
+        for i, value in enumerate(values, start=2):
+            if start_idx + i < end_idx:
+                row_parts = self.content[start_idx + i].split('|')
+                row_parts.insert(-1, f' {str(value).strip()} ')
+                self.content[start_idx + i] = '|'.join(row_parts)
