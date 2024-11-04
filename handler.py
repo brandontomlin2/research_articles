@@ -2,6 +2,7 @@ import os
 import logging
 from typing import List, Tuple, Optional
 from pathlib import Path
+from readme_manager import ReadmeManager
 
 class ReadmeManager:
     """A class to manage README.md files with support for headers, tables, and links."""
