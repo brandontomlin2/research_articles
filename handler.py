@@ -1,13 +1,28 @@
 class ReadmeManager:
-    def __init__(self, filepath='README.md'):
+    def __init__(self, filepath='README.md', preserve_existing=False):
         """Initialize the README manager with a filepath.
         
         Args:
             filepath (str): Path to the README.md file
+            preserve_existing (bool): If True, keeps existing content. If False, starts fresh.
         """
+        import os
         self.filepath = filepath
         self.content = []
-        self._load_content()
+        
+        # Delete existing file if it exists and we're not preserving content
+        if not preserve_existing and os.path.exists(filepath):
+            try:
+                os.remove(filepath)
+                print(f"Deleted existing file: {filepath}")
+            except PermissionError:
+                print(f"Warning: Could not delete {filepath} due to permission error")
+            except Exception as e:
+                print(f"Warning: Could not delete {filepath}. Error: {str(e)}")
+        
+        # Only load existing content if we're preserving it
+        if preserve_existing:
+            self._load_content()
     
     @staticmethod
     def create_link(text, url):
@@ -152,11 +167,13 @@ class ReadmeManager:
                 row_parts = self.content[start_idx + i].split('|')
                 row_parts.insert(-1, f' {value} ')
                 self.content[start_idx + i] = '|'.join(row_parts)
-
 # Example usage:
 if __name__ == "__main__":
     # Create a new README manager
-    readme = ReadmeManager('README.md')
+    readme = ReadmeManager(
+        'README.md', 
+        preserve_existing=False
+    )
     
     # Add a main header
     readme.add_header('Research')
@@ -173,9 +190,16 @@ if __name__ == "__main__":
     # Create some links and add rows
     docs_link = readme.create_link('SCIENCEAGENTBENCH:TOWARD RIGOROUS ASSESSMENT OF LANGUAGE AGENTS FOR DATA-DRIVEN SCIENTIFIC DISCOVERY', 
                                    'docs/2410.05080v2.pdf')
-    readme.add_table_row([docs_link, 'Summary goes here'])
-    
-    
+    readme.add_table_row([docs_link, ''])
+
+    docs_link = readme.create_link('Combining Language Models and Knowledge Graphs for Effective Information Retrieval',
+                                   'docs/Combining_Language_Models_and_Knowledge_Graphs_for_Effective_Information_Retrieval.pdf')
+    readme.add_table_row([docs_link, ''])
+
+    docs_link = readme.create_link('Transforming Asset Servicing With AI, Oracles, and Blockchains',
+                                   'docs/transforming-asset-servicing-with-ai-oracles-and-blockchains.pdf')
+    readme.add_table_row([docs_link, ''])
+
     # Add a row with multiple links in one cell
     # docs_links = (
     #     readme.create_link('Setup', 'https://docs.example.com/setup') + ' | ' +
