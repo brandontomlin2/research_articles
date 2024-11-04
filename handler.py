@@ -174,20 +174,11 @@ if __name__ == "__main__":
         'README.md', 
         preserve_existing=False
     )
-    
-    # Add a main header
     readme.add_header('Research')
-    
-    # Add some description
     readme.add_text('Below you will find a list of all the research / articles that I have read and found interesting.')
     
-    # Add a subheader
     readme.add_header('Articles', level=2)
-    
-    # Create a table with links
     readme.create_table(['Title', 'Summary'])
-    
-    # Create some links and add rows
     docs_link = readme.create_link('SCIENCEAGENTBENCH:TOWARD RIGOROUS ASSESSMENT OF LANGUAGE AGENTS FOR DATA-DRIVEN SCIENTIFIC DISCOVERY', 
                                    'docs/2410.05080v2.pdf')
     readme.add_table_row([docs_link, ''])
