@@ -40,6 +40,26 @@ def main():
             "url": "docs/2024.04.25.591003v3.full.pdf",
             "summary": "",
         },
+        {
+            "title": "Impact of Code Transformation on Detection of Smart Contract Vulnerabilities",
+            "url": "docs/2410.21685.pdf",
+            "summary": "",
+        },
+        {
+            "title": "Attention Is All You Need for LLM-based Code Vulnerability Localization",
+            "url": "docs/2410.15288v1.pdf",
+            "summary": "",
+        },
+        {
+            "title": "Leveraging Fine-Tuned Language Models for Efficient and Accurate Smart Contract Auditing",
+            "url": "docs/2410.13918v1.pdf",
+            "summary": "",
+        },
+        {
+            "title": "LLM-SmartAudit: Advanced Smart Contract Vulnerability Detection",
+            "url": "docs/2410.09381v1.pdf",
+            "summary": "",
+        },
     ]
 
     for article in articles:
