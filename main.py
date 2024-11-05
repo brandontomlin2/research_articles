@@ -70,6 +70,16 @@ def main():
             "url": "2409.12171v1.pdf",
             "summary": "",
         },
+        {
+            "title": "Detect Llama - Finding Vulnerabilities in Smart Contracts using Large Language Models",
+            "url": "docs/2407.08969v1.pdf",
+            "summary": "",
+        },
+        {
+            "title": "Vulnerability Detection in Smart Contracts: A Comprehensive Survey",
+            "url": "docs/2407.07922v1.pdf",
+            "summary": "",
+        },
     ]
 
     for article in articles:
