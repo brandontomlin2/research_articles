@@ -6,7 +6,10 @@ def main():
     root_dir = Path(__file__).parent
     readme_path = root_dir / "README.md"
 
-    readme = ReadmeManager(filepath=str(readme_path.absolute()))
+    readme = ReadmeManager(
+        filepath=str(readme_path.absolute()),
+        preserve_existing=False,
+    )
 
     readme.add_header("Research")
     readme.add_text(
@@ -29,7 +32,12 @@ def main():
         },
         {
             "title": "Transforming Asset Servicing With AI, Oracles, and Blockchains",
-            "url": "docs/transforming-asset-servicing-with-ai-oracles-and-blockchains.pdf",
+            "url": "docs/transforming-asset-servicing.pdf",
+            "summary": "",
+        },
+        {
+            "title": "CRISPR-GPT: An LLM Agent for Automated Design of Gene-Editing Experiments",
+            "url": "docs/2024.04.25.591003v3.full.pdf",
             "summary": "",
         },
     ]
