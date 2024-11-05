@@ -60,6 +60,16 @@ def main():
             "url": "docs/2410.09381v1.pdf",
             "summary": "",
         },
+        {
+            "title": "CountChain: A Decentralized Oracle Network for Counting Systems",
+            "url": "docs/2409.11592v1.pdf",
+            "summary": "",
+        },
+        {
+            "title": "Semantic Interoperability on Blockchain by Generating Smart Contracts Based on Knowledge Graphs",
+            "url": "2409.12171v1.pdf",
+            "summary": "",
+        },
     ]
 
     for article in articles:
