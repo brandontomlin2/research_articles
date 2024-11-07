@@ -17,7 +17,7 @@ def main():
     )
     readme.add_text("If you would like to contribute to this list, please open a PR.")
     readme.add_header("Articles", level=2)
-    readme.create_table(["Title", "Summary", "Source"])
+    readme.create_table(["Title", "Summary"])
 
     articles = [
         {
@@ -101,10 +101,12 @@ def main():
     ]
 
     for article in articles:
-        doc_link = readme.create_link(article["title"], article["url"])
-        url_link = readme.create_link(article["title"], article["source"])
+        doc_link = readme.create_link(article["title"], article["source"])
 
-        readme.add_table_row([doc_link, article["summary"], url_link])
+        readme.add_table_row([
+            doc_link,
+            article["summary"]
+            ])
 
     readme.save()
 
