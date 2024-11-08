@@ -98,6 +98,12 @@ def main():
             "summary": "",
             "source": "https://arxiv.org/pdf/2305.15334v1.pdf",
         },
+        {
+            "title": "MAD: Move AI Decompiler to Improve Transparency and Auditability on Non-Open-Source Blockchain Smart Contract",
+            "url": "docs/2410.15275.pdf",
+            "summary": "",
+            "source": "https://arxiv.org/pdf/2410.15275",
+        },
     ]
 
     for article in articles:
