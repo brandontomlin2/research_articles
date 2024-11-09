@@ -104,6 +104,24 @@ def main():
             "summary": "",
             "source": "https://arxiv.org/pdf/2410.15275",
         },
+        {
+            "title": "Financial Statement Analysis with Large Language Models",
+            "url": "docs/BFI_WP_2024-65.pdf",
+            "summary": "",
+            "source": "https://bfi.uchicago.edu/wp-content/uploads/2024/05/BFI_WP_2024-65.pdf",
+        },
+        {
+            "title": "Artificial Intelligence, Scientific Discovery, and Product Innovation*",
+            "url": "docs/AI_innovation.pdf",
+            "summary": "",
+            "source": "https://aidantr.github.io/files/AI_innovation.pdf",
+        },
+        {
+            "title": "LONGMEMEVAL: BENCHMARKING CHAT ASSISTANTS ON LONG-TERM INTERACTIVE MEMORY",
+            "url": "docs/AI_science.pdf",
+            "summary": "",
+            "source": "https://arxiv.org/pdf/2410.10813",
+        },
     ]
 
     for article in articles:
