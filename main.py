@@ -122,6 +122,24 @@ def main():
             "summary": "",
             "source": "https://arxiv.org/pdf/2410.10813",
         },
+        {
+            "title": "LIGHTWEIGHT NEURAL APP CONTROL",
+            "url": "docs/2410.17883.pdf",
+            "summary": "",
+            "source": "https://arxiv.org/pdf/2410.17883",
+        },
+        {
+            "title": "miniCTX: Neural Theorem Proving with (Long-)Contexts",
+            "url": "docs/2408.03350.pdf",
+            "summary": "",
+            "source": "https://www.arxiv.org/pdf/2408.03350",
+        },
+        {
+            "title": "The Moral Case for Using Language Model Agents for Recommendation",
+            "url": "docs/2410.12123.pdf",
+            "summary": "",
+            "source": "https://arxiv.org/abs/2410.12123", 
+        },
     ]
 
     for article in articles:
