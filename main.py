@@ -140,6 +140,12 @@ def main():
             "summary": "",
             "source": "https://arxiv.org/abs/2410.12123", 
         },
+        {
+            "title": "Towards Edge General Intelligence via LargeLanguage Models: Opportunities and Challenges",
+            "url": "docs/2410.18125v1.pdf",
+            "summary": "",
+            "source": "https://arxiv.org/pdf/2410.18125", 
+        }
     ]
 
     for article in articles:
